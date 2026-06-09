@@ -1,13 +1,12 @@
 package com.template;
 
+import javafx.animation.PauseTransition;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.util.Duration;
 
 public class MainController {
 
@@ -66,6 +65,11 @@ public class MainController {
                 txtTitulos.setText(String.valueOf(newValue.getTitulos()));
             }
         });
+
+        configurarCampoNumerico(txtAno);
+        configurarCampoNumerico(txtGols);
+        configurarCampoNumerico(txtAssistencias);
+        configurarCampoNumerico(txtTitulos);
     }
 
     private void carregarDadosTabela() {
@@ -102,7 +106,13 @@ public class MainController {
 
         limparCampos();
         carregarDadosTabela(); // Atualiza a tabela na hora!
-        System.out.println("Jogador salvo com sucesso!");
+        // ... código anterior de salvar ...
+        objDAO.cadastrarJogador(novoJogador);
+
+        limparCampos();
+        carregarDadosTabela();
+
+        exibirMensagem("Alteracao", "Jogador adicionado com sucesso!", "#429e42");
     }
 
     @FXML
@@ -117,7 +127,8 @@ public class MainController {
             objDAO.excluirJogador(id);
             limparCampos();
             carregarDadosTabela(); // Atualiza a tabela na hora!
-            System.out.println("Jogador excluído com sucesso!");
+
+            exibirMensagem("Alteracao", "Jogador excluído com sucesso!", "#9e4242");
         }
     }
 
@@ -139,7 +150,46 @@ public class MainController {
 
             limparCampos();
             carregarDadosTabela(); // Atualiza a tabela na hora!
-            System.out.println("Jogador atualizado com sucesso!");
+            exibirMensagem("Alteracao", "Jogador editado com sucesso!", "#426a9e");
         }
+    }
+
+
+    private void exibirMensagem(String titulo, String mensagem, String corHex) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(titulo);
+        alert.setHeaderText(null);
+        alert.setContentText(mensagem);
+
+        // Customização do layout (CSS)
+        DialogPane dialogPane = alert.getDialogPane();
+        dialogPane.setStyle(
+                "-fx-background-color: " + corHex + "; " +
+                        "-fx-text-fill: white; " +
+                        "-fx-font-family: 'Arial'; " +
+                        "-fx-font-size: 14px;"
+        );
+        dialogPane.lookupAll(".content").forEach(node -> node.setStyle("-fx-text-fill: white;"));
+
+        // Mostra o alerta sem travar a execução do código
+        alert.show();
+
+        // Cria um "cronômetro" de 3 segundos
+        PauseTransition delay = new PauseTransition(Duration.seconds(2));
+
+        // Quando o tempo acabar, fecha o alerta automaticamente
+        delay.setOnFinished(event -> alert.close());
+
+        // Inicia a contagem regressiva
+        delay.play();
+    }
+
+    private void configurarCampoNumerico(TextField campo) {
+        campo.textProperty().addListener((observable, oldValue, newValue) -> {
+            // Se o novo valor contiver qualquer coisa que NÃO seja número, substitui pelo valor antigo
+            if (!newValue.matches("\\d*")) {
+                campo.setText(newValue.replaceAll("[^\\d]", ""));
+            }
+        });
     }
 }
