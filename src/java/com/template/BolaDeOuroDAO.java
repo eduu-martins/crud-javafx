@@ -1,8 +1,4 @@
 package com.template;
-
-//import model.Conexao;
-//import model.dto.BolaDeOuroDTO;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -10,6 +6,9 @@ import java.sql.SQLException;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 public class BolaDeOuroDAO {
 
@@ -43,7 +42,7 @@ public class BolaDeOuroDAO {
     }
 
     // metodo para listar todos os jogadores cadastrados
-    public void listarJogadores() {
+    /* public void listarJogadores() {
 
         String sql = "SELECT * FROM bola_de_ouro";
 
@@ -68,6 +67,33 @@ public class BolaDeOuroDAO {
 
             logger.log(Level.SEVERE, "Erro ao listar jogadores", e);
         }
+    }*/
+    public ObservableList<BolaDeOuroDTO> listarJogadores() {
+        String sql = "SELECT * FROM bola_de_ouro ORDER BY ano DESC";
+        ObservableList<BolaDeOuroDTO> lista = FXCollections.observableArrayList();
+
+        try (Connection conn = new Conexao().conectaBD();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                BolaDeOuroDTO jogador = new BolaDeOuroDTO(
+                        rs.getInt("id"),
+                        rs.getString("jogador"),
+                        rs.getString("pais"),
+                        rs.getString("clube"),
+                        rs.getInt("ano"),
+                        rs.getInt("gols"),
+                        rs.getInt("assistencias"),
+                        rs.getInt("titulos")
+                );
+                lista.add(jogador);
+            }
+
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, "Erro ao listar jogadores", e);
+        }
+        return lista;
     }
 
     // metodo para atualizar os dados de um jogador pelo id
