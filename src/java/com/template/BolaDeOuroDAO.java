@@ -41,33 +41,6 @@ public class BolaDeOuroDAO {
         }
     }
 
-    // metodo para listar todos os jogadores cadastrados
-    /* public void listarJogadores() {
-
-        String sql = "SELECT * FROM bola_de_ouro";
-
-        try (Connection conn = new Conexao().conectaBD();
-             PreparedStatement stmt = conn.prepareStatement(sql);
-             ResultSet rs = stmt.executeQuery()) {
-
-            logger.info("Lista de jogadores:");
-
-            while (rs.next()) {
-                System.out.println(
-                        "ID: " + rs.getInt("id") +
-                                " | Jogador: " + rs.getString("jogador") +
-                                " | Ano: " + rs.getInt("ano") +
-                                " | Gols: " + rs.getInt("gols") +
-                                " | Assistencias: " + rs.getInt("assistencias") +
-                                " | Titulos: " + rs.getInt("titulos")
-                );
-            }
-
-        } catch (SQLException e) {
-
-            logger.log(Level.SEVERE, "Erro ao listar jogadores", e);
-        }
-    }*/
     public ObservableList<BolaDeOuroDTO> listarJogadores() {
         String sql = "SELECT * FROM bola_de_ouro ORDER BY ano DESC";
         ObservableList<BolaDeOuroDTO> lista = FXCollections.observableArrayList();
