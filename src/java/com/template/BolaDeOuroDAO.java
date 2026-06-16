@@ -31,6 +31,7 @@ public class BolaDeOuroDAO {
             stmt.setInt(6, jogador.getAssistencias());
             stmt.setInt(7, jogador.getTitulos());
 
+            //insere no bd
             stmt.executeUpdate();
 
             logger.info("Jogador cadastrado com sucesso");
@@ -60,6 +61,8 @@ public class BolaDeOuroDAO {
                         rs.getInt("assistencias"),
                         rs.getInt("titulos")
                 );
+
+                //"Add" um jogador na lista
                 lista.add(jogador);
             }
 
@@ -86,6 +89,7 @@ public class BolaDeOuroDAO {
             stmt.setInt(7, jogador.getTitulos());
             stmt.setInt(8, jogador.getId());
 
+            //insere no bd
             stmt.executeUpdate();
 
             logger.info("Jogador atualizado com sucesso");

@@ -52,7 +52,7 @@ public class MainController {
         // Carrega as linhas vindas do banco na inicialização
         carregarDadosTabela();
 
-        // Clique na tabela: Ao selecionar um jogador, joga os dados de volta para as caixas de texto
+        // ao selecionar um jogador joga os dados para as txtbox
         tblGanhadoresBolaDeOuro.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
                 txtId.setText(String.valueOf(newValue.getId()));
