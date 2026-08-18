@@ -1,26 +1,22 @@
-package com.template;
+package com.template.model.dao;
+
+import com.template.model.Conexao;
+import com.template.model.dto.BolaDeOuroDTO;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-
 public class BolaDeOuroDAO {
 
-    // cria o logger da classe
-    private static final Logger logger = Logger.getLogger(BolaDeOuroDAO.class.getName());
-
-    // metodo para inserir um novo jogador no banco
-    public void cadastrarJogador(BolaDeOuroDTO jogador) {
-
+    public void cadastrarJogador(BolaDeOuroDTO jogador) throws SQLException {
         String sql = "INSERT INTO bola_de_ouro (jogador, pais, clube, ano, gols, assistencias, titulos) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
-        try (Connection conn = new Conexao().conectaBD();
+        Conexao conexao = new Conexao();
+        try (Connection conn = conexao.conectaBD();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, jogador.getJogador());
@@ -31,22 +27,16 @@ public class BolaDeOuroDAO {
             stmt.setInt(6, jogador.getAssistencias());
             stmt.setInt(7, jogador.getTitulos());
 
-            //insere no bd
             stmt.executeUpdate();
-
-            logger.info("Jogador cadastrado com sucesso");
-
-        } catch (SQLException e) {
-
-            logger.log(Level.SEVERE, "Erro ao cadastrar jogador", e);
         }
     }
 
-    public ObservableList<BolaDeOuroDTO> listarJogadores() {
+    public ObservableList<BolaDeOuroDTO> listarJogadores() throws SQLException {
         String sql = "SELECT * FROM bola_de_ouro ORDER BY ano DESC";
         ObservableList<BolaDeOuroDTO> lista = FXCollections.observableArrayList();
 
-        try (Connection conn = new Conexao().conectaBD();
+        Conexao conexao = new Conexao();
+        try (Connection conn = conexao.conectaBD();
              PreparedStatement stmt = conn.prepareStatement(sql);
              ResultSet rs = stmt.executeQuery()) {
 
@@ -61,23 +51,17 @@ public class BolaDeOuroDAO {
                         rs.getInt("assistencias"),
                         rs.getInt("titulos")
                 );
-
-                //"Add" um jogador na lista
                 lista.add(jogador);
             }
-
-        } catch (SQLException e) {
-            logger.log(Level.SEVERE, "Erro ao listar jogadores", e);
         }
         return lista;
     }
 
-    // metodo para atualizar os dados de um jogador pelo id
-    public void alterarJogador(BolaDeOuroDTO jogador) {
-
+    public void alterarJogador(BolaDeOuroDTO jogador) throws SQLException {
         String sql = "UPDATE bola_de_ouro SET jogador = ?, pais = ?, clube = ?, ano = ?, gols = ?, assistencias = ?, titulos = ? WHERE id = ?";
 
-        try (Connection conn = new Conexao().conectaBD();
+        Conexao conexao = new Conexao();
+        try (Connection conn = conexao.conectaBD();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, jogador.getJogador());
@@ -89,34 +73,19 @@ public class BolaDeOuroDAO {
             stmt.setInt(7, jogador.getTitulos());
             stmt.setInt(8, jogador.getId());
 
-            //insere no bd
             stmt.executeUpdate();
-
-            logger.info("Jogador atualizado com sucesso");
-
-        } catch (SQLException e) {
-
-            logger.log(Level.SEVERE, "Erro ao atualizar jogador", e);
         }
     }
 
-    // metodo para excluir um jogador pelo id
-    public void excluirJogador(int id) {
-
+    public void excluirJogador(int id) throws SQLException {
         String sql = "DELETE FROM bola_de_ouro WHERE id = ?";
 
-        try (Connection conn = new Conexao().conectaBD();
+        Conexao conexao = new Conexao();
+        try (Connection conn = conexao.conectaBD();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setInt(1, id);
-
             stmt.executeUpdate();
-
-            logger.info("Jogador excluido com sucesso");
-
-        } catch (SQLException e) {
-
-            logger.log(Level.SEVERE, "Erro ao excluir jogador", e);
         }
     }
 }

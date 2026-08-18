@@ -1,11 +1,7 @@
-package com.template;
+package com.template.model.dto;
 
-/**
- * Classe que representa os dados de um jogador vencedor da bola de ouro
- */
 public class BolaDeOuroDTO {
 
-    // atributos da classe
     private int id;
     private String jogador;
     private String pais;
@@ -15,11 +11,9 @@ public class BolaDeOuroDTO {
     private int assistencias;
     private int titulos;
 
-    // construtor vazio
     public BolaDeOuroDTO() {
     }
 
-    // construtor completo
     public BolaDeOuroDTO(int id, String jogador, String pais, String clube, int ano, int gols, int assistencias, int titulos) {
         this.id = id;
         this.jogador = jogador;
@@ -30,8 +24,6 @@ public class BolaDeOuroDTO {
         this.assistencias = assistencias;
         this.titulos = titulos;
     }
-
-    // getters e setters
 
     public int getId() {
         return id;

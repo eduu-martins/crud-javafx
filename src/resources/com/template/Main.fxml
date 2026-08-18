@@ -11,20 +11,20 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.shape.Rectangle?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.template.MainController">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.template.controller.MainController">
     <children>
         <Pane layoutX="-14.0" prefHeight="702.0" prefWidth="1060.0" style="-fx-background-color: #3b3b3b;">
             <children>
                 <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#686868" height="389.0" layoutX="40.0" layoutY="157.0" stroke="BLACK" strokeType="INSIDE" width="286.0" />
-                <Button fx:id="btSalvar" alignment="CENTER" layoutX="235.0" layoutY="558.0" mnemonicParsing="false" onAction="#btnSalvarAction" prefHeight="38.0" prefWidth="71.0" style="-fx-background-color: #429e42; -fx-background-radius: 7;" text="Adicionar" textAlignment="CENTER" textFill="WHITE" />
+                <Button fx:id="btnSalvar" alignment="CENTER" layoutX="235.0" layoutY="558.0" mnemonicParsing="false" onAction="#btnSalvarAction" prefHeight="38.0" prefWidth="71.0" style="-fx-background-color: #429e42; -fx-background-radius: 7;" text="Adicionar" textAlignment="CENTER" textFill="WHITE" />
                 <Label layoutX="85.0" layoutY="306.0" text="País:" textFill="WHITE" />
-                <Button fx:id="btExcluir" alignment="CENTER" layoutX="69.0" layoutY="616.0" mnemonicParsing="false" onAction="#btnExcluirAction" prefHeight="38.0" prefWidth="71.0" style="-fx-background-color: #9e4242; -fx-background-radius: 7;" text="Excluir" textAlignment="CENTER" textFill="WHITE" />
+                <Button fx:id="btnExcluir" alignment="CENTER" layoutX="69.0" layoutY="616.0" mnemonicParsing="false" onAction="#btnExcluirAction" prefHeight="38.0" prefWidth="71.0" style="-fx-background-color: #9e4242; -fx-background-radius: 7;" text="Excluir" textAlignment="CENTER" textFill="WHITE" />
                 <Button fx:id="btnLimpar" layoutX="59.0" layoutY="178.0" mnemonicParsing="false" onAction="#btnLimparAction" prefHeight="3.0" prefWidth="101.0" text="Limpar campos" />
-                <Button fx:id="btAtualizar" alignment="CENTER" layoutX="68.0" layoutY="559.0" mnemonicParsing="false" onAction="#btnAtualizarAction" prefHeight="38.0" prefWidth="71.0" style="-fx-background-color: #426a9e; -fx-background-radius: 7;" text="Atualizar" textAlignment="CENTER" textFill="WHITE" />
+                <Button fx:id="btnAtualizar" alignment="CENTER" layoutX="68.0" layoutY="559.0" mnemonicParsing="false" onAction="#btnAtualizarAction" prefHeight="38.0" prefWidth="71.0" style="-fx-background-color: #426a9e; -fx-background-radius: 7;" text="Atualizar" textAlignment="CENTER" textFill="WHITE" />
 
                 <TableView fx:id="tblGanhadoresBolaDeOuro" layoutX="356.0" layoutY="36.0" prefHeight="631.0" prefWidth="659.0" style="-fx-background-color: #e3e3e3; -fx-border-color: #D3AF37;">
                     <columns>
-                        <TableColumn fx:id="colid" prefWidth="52.725830078125" text="ID" />
+                        <TableColumn fx:id="colId" prefWidth="52.725830078125" text="ID" />
                         <TableColumn fx:id="colJogador" prefWidth="118.8348388671875" text="Jogador" />
                         <TableColumn fx:id="colPais" prefWidth="116.8135986328125" text="País" />
                         <TableColumn fx:id="colClube" prefWidth="95.18646240234375" text="Clube" />
@@ -57,18 +57,16 @@
 
                 <Label layoutX="78.0" layoutY="490.0" text="Títulos:" textFill="WHITE" />
                 <TextField fx:id="txtTitulos" layoutX="123.0" layoutY="485.0" />
-            <ImageView fitHeight="134.0" fitWidth="131.0" layoutX="139.0" layoutY="12.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="https://en.namu.wiki/w/%EB%B0%9C%EB%A1%B1%EB%8F%84%EB%A5%B4" />
-               </image>
-            </ImageView>
-            <ImageView fitHeight="134.0" fitWidth="144.0" layoutX="139.0" layoutY="12.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../../../images/ballon_dor_icon.png" />
-               </image>
-            </ImageView>
-
-
+                <ImageView fitHeight="134.0" fitWidth="131.0" layoutX="139.0" layoutY="12.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="https://en.namu.wiki/w/%EB%B0%9C%EB%A1%B1%EB%8F%84%EB%A5%B4" />
+                    </image>
+                </ImageView>
+                <ImageView fitHeight="134.0" fitWidth="144.0" layoutX="139.0" layoutY="12.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@ballon_dor_icon.png" />
+                    </image>
+                </ImageView>
             </children>
         </Pane>
     </children>
