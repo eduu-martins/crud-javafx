@@ -88,13 +88,16 @@ public class MainController {
     private void btnSalvarAction(ActionEvent event) {
         try {
             BolaDeOuroDTO novoJogador = extrairDadosFormulario(0);
-            service.salvar(novoJogador);
 
-            limparCampos();
-            carregarDadosTabela();
-            DialogUtil.exibirSucesso("Jogador cadastrado com sucesso!");
-        } catch (IllegalArgumentException e) {
-            DialogUtil.exibirErro(e.getMessage());
+            // Guardamos o retorno (true ou false) da validação do serviço
+            boolean salvou = service.salvar(novoJogador);
+
+            // Só limpa e avisa de sucesso se REALMENTE salvou
+            if (salvou) {
+                limparCampos();
+                carregarDadosTabela();
+                DialogUtil.exibirSucesso("Jogador cadastrado com sucesso!");
+            }
         } catch (SQLException e) {
             DialogUtil.exibirErro("Erro ao salvar no banco de dados: " + e.getMessage());
         }
@@ -112,13 +115,15 @@ public class MainController {
                 int id = Integer.parseInt(txtId.getText());
                 BolaDeOuroDTO jogadorEditado = extrairDadosFormulario(id);
 
-                service.atualizar(jogadorEditado);
+                // Guardamos o retorno (true ou false) da validação do serviço
+                boolean atualizou = service.atualizar(jogadorEditado);
 
-                limparCampos();
-                carregarDadosTabela();
-                DialogUtil.exibirSucesso("Jogador atualizado com sucesso!");
-            } catch (IllegalArgumentException e) {
-                DialogUtil.exibirErro(e.getMessage());
+                // Só limpa e avisa de sucesso se REALMENTE atualizou
+                if (atualizou) {
+                    limparCampos();
+                    carregarDadosTabela();
+                    DialogUtil.exibirSucesso("Jogador atualizado com sucesso!");
+                }
             } catch (SQLException e) {
                 DialogUtil.exibirErro("Erro ao atualizar jogador: " + e.getMessage());
             }

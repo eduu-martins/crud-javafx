@@ -1,21 +1,33 @@
-package com.template.validator; // ou com.template.util (conforme o pacote do seu amigo)
+package com.template.validator;
 
 import com.template.model.dto.BolaDeOuroDTO;
+import com.template.util.DialogUtil;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class BolaDeOuroValidator {
+    public static boolean validar(BolaDeOuroDTO jogador) {
+        List<Validador<String>> validadores = new ArrayList<>();
 
-    public static void validar(BolaDeOuroDTO jogador) throws IllegalArgumentException {
-        if (jogador.getJogador() == null || jogador.getJogador().trim().isEmpty() ||
-                jogador.getPais() == null || jogador.getPais().trim().isEmpty() ||
-                jogador.getClube() == null || jogador.getClube().trim().isEmpty()) {
+        // validadores texto
+        validadores.add(new CampoObrigatorioValidador("Jogador", jogador.getJogador()));
+        validadores.add(new CampoObrigatorioValidador("País", jogador.getPais()));
+        validadores.add(new CampoObrigatorioValidador("Clube", jogador.getClube()));
 
-            throw new IllegalArgumentException("Todos os campos de texto devem ser preenchidos.");
+        // validadores numéricos
+        validadores.add(new CampoObrigatorioValidador("Ano", jogador.getAno(), 1901));
+        validadores.add(new CampoObrigatorioValidador("Gols", jogador.getGols(), 0));
+        validadores.add(new CampoObrigatorioValidador("Assistências", jogador.getAssistencias(), 0));
+        validadores.add(new CampoObrigatorioValidador("Títulos", jogador.getTitulos(), 0));
+
+        // Executa o loop
+        for (Validador<String> validador : validadores) {
+            if (!validador.validar(validador.getValor())) {
+                DialogUtil.exibirErro(validador.getMensagemErro());
+                return false;
+            }
         }
-
-        if (jogador.getAno() <= 1900 || jogador.getGols() < 0 ||
-                jogador.getAssistencias() < 0 || jogador.getTitulos() < 0) {
-
-            throw new IllegalArgumentException("Preencha valores numéricos válidos e coerentes.");
-        }
+        return true;
     }
 }

@@ -15,16 +15,24 @@ public class BolaDeOuroService {
         return bolaDeOuroDAO.listarJogadores();
     }
 
-    public void salvar(BolaDeOuroDTO jogador) throws SQLException, IllegalArgumentException {
+    public boolean salvar(BolaDeOuroDTO jogador) throws SQLException, IllegalArgumentException {
         // Valida antes de enviar ao DAO
-        BolaDeOuroValidator.validar(jogador);
+        //BolaDeOuroValidator.validar(jogador);
+        if(!BolaDeOuroValidator.validar(jogador)){
+            return false;
+        }
         bolaDeOuroDAO.cadastrarJogador(jogador);
+        return true;
     }
 
-    public void atualizar(BolaDeOuroDTO jogador) throws SQLException, IllegalArgumentException {
+    public boolean atualizar(BolaDeOuroDTO jogador) throws SQLException, IllegalArgumentException {
         // Valida antes de enviar ao DAO
-        BolaDeOuroValidator.validar(jogador);
+        //BolaDeOuroValidator.validar(jogador);
+        if(!BolaDeOuroValidator.validar(jogador)){
+            return false;
+        }
         bolaDeOuroDAO.alterarJogador(jogador);
+        return true;
     }
 
     public void excluir(int id) throws SQLException {
