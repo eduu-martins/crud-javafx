@@ -3,16 +3,13 @@ package com.template.controller;
 import com.template.model.dto.BolaDeOuroDTO;
 import com.template.service.BolaDeOuroService;
 import com.template.util.DialogUtil;
-import com.template.util.FormUtil;
 
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.sql.SQLException;
 
@@ -43,42 +40,28 @@ public class MainController {
     @FXML private TableColumn<BolaDeOuroDTO, Integer> colAssistencias;
     @FXML private TableColumn<BolaDeOuroDTO, Integer> colTitulos;
 
-    // Injeção da Camada de Serviço
     private final BolaDeOuroService service = new BolaDeOuroService();
+    private JogadorFormHandler formHandler;
+    private JogadorTableHandler tableHandler;
 
     @FXML
     private void initialize() {
-        configurarTabela();
-        configurarFormatacaoCampos();
+        formHandler = new JogadorFormHandler(
+                txtId, txtJogador, txtPais, txtClube, txtAno, txtGols, txtAssistencias, txtTitulos
+        );
+
+        tableHandler = new JogadorTableHandler(
+                tblGanhadoresBolaDeOuro, colId, colJogador, colPais, colClube,
+                colAno, colGols, colAssistencias, colTitulos,
+                formHandler::preencherCampos
+        );
+
         carregarDadosTabela();
-    }
-
-    private void configurarTabela() {
-        colId.setCellValueFactory(new PropertyValueFactory<>("id"));
-        colJogador.setCellValueFactory(new PropertyValueFactory<>("jogador"));
-        colPais.setCellValueFactory(new PropertyValueFactory<>("pais"));
-        colClube.setCellValueFactory(new PropertyValueFactory<>("clube"));
-        colAno.setCellValueFactory(new PropertyValueFactory<>("ano"));
-        colGols.setCellValueFactory(new PropertyValueFactory<>("gols"));
-        colAssistencias.setCellValueFactory(new PropertyValueFactory<>("assistencias"));
-        colTitulos.setCellValueFactory(new PropertyValueFactory<>("titulos"));
-
-        tblGanhadoresBolaDeOuro.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            preencherCamposFormulario(newValue);
-        });
-    }
-
-    private void configurarFormatacaoCampos() {
-        FormUtil.permitirApenasNumeros(txtAno);
-        FormUtil.permitirApenasNumeros(txtGols);
-        FormUtil.permitirApenasNumeros(txtAssistencias);
-        FormUtil.permitirApenasNumeros(txtTitulos);
     }
 
     private void carregarDadosTabela() {
         try {
-            ObservableList<BolaDeOuroDTO> lista = service.buscarTodos();
-            tblGanhadoresBolaDeOuro.setItems(lista);
+            tableHandler.atualizarItens(service.buscarTodos());
         } catch (SQLException e) {
             DialogUtil.exibirErro("Erro ao carregar a lista de jogadores: " + e.getMessage());
         }
@@ -87,14 +70,12 @@ public class MainController {
     @FXML
     private void btnSalvarAction(ActionEvent event) {
         try {
-            BolaDeOuroDTO novoJogador = extrairDadosFormulario(0);
+            BolaDeOuroDTO novoJogador = formHandler.extrairDados(0);
 
-            // Guardamos o retorno (true ou false) da validação do serviço
             boolean salvou = service.salvar(novoJogador);
 
-            // Só limpa e avisa de sucesso se REALMENTE salvou
             if (salvou) {
-                limparCampos();
+                limparTela();
                 carregarDadosTabela();
                 DialogUtil.exibirSucesso("Jogador cadastrado com sucesso!");
             }
@@ -105,22 +86,19 @@ public class MainController {
 
     @FXML
     private void btnAtualizarAction(ActionEvent event) {
-        if (txtId.getText().isEmpty()) {
+        if (!formHandler.temIdSelecionado()) {
             DialogUtil.exibirErro("Selecione um jogador na tabela para atualizar.");
             return;
         }
 
         if (DialogUtil.exibirConfirmacao("Confirmar Atualização", "Deseja salvar as alterações deste jogador?")) {
             try {
-                int id = Integer.parseInt(txtId.getText());
-                BolaDeOuroDTO jogadorEditado = extrairDadosFormulario(id);
+                BolaDeOuroDTO jogadorEditado = formHandler.extrairDados(formHandler.getIdSelecionado());
 
-                // Guardamos o retorno (true ou false) da validação do serviço
                 boolean atualizou = service.atualizar(jogadorEditado);
 
-                // Só limpa e avisa de sucesso se REALMENTE atualizou
                 if (atualizou) {
-                    limparCampos();
+                    limparTela();
                     carregarDadosTabela();
                     DialogUtil.exibirSucesso("Jogador atualizado com sucesso!");
                 }
@@ -132,17 +110,16 @@ public class MainController {
 
     @FXML
     private void btnExcluirAction(ActionEvent event) {
-        if (txtId.getText().isEmpty()) {
+        if (!formHandler.temIdSelecionado()) {
             DialogUtil.exibirErro("Selecione um jogador na tabela para poder excluir.");
             return;
         }
 
         if (DialogUtil.exibirConfirmacao("Confirmar Exclusão", "Tem certeza que deseja excluir este jogador?")) {
             try {
-                int id = Integer.parseInt(txtId.getText());
-                service.excluir(id);
+                service.excluir(formHandler.getIdSelecionado());
 
-                limparCampos();
+                limparTela();
                 carregarDadosTabela();
                 DialogUtil.exibirSucesso("Jogador excluído com sucesso!");
             } catch (SQLException e) {
@@ -153,49 +130,11 @@ public class MainController {
 
     @FXML
     private void btnLimparAction(ActionEvent event) {
-        limparCampos();
+        limparTela();
     }
 
-    private void preencherCamposFormulario(BolaDeOuroDTO jogador) {
-        if (jogador != null) {
-            txtId.setText(String.valueOf(jogador.getId()));
-            txtJogador.setText(jogador.getJogador());
-            txtPais.setText(jogador.getPais());
-            txtClube.setText(jogador.getClube());
-            txtAno.setText(String.valueOf(jogador.getAno()));
-            txtGols.setText(String.valueOf(jogador.getGols()));
-            txtAssistencias.setText(String.valueOf(jogador.getAssistencias()));
-            txtTitulos.setText(String.valueOf(jogador.getTitulos()));
-        }
-    }
-
-    private void limparCampos() {
-        txtId.clear();
-        txtJogador.clear();
-        txtPais.clear();
-        txtClube.clear();
-        txtAno.clear();
-        txtGols.clear();
-        txtAssistencias.clear();
-        txtTitulos.clear();
-        tblGanhadoresBolaDeOuro.getSelectionModel().clearSelection();
-    }
-
-    private BolaDeOuroDTO extrairDadosFormulario(int id) {
-        int ano = txtAno.getText().isEmpty() ? 0 : Integer.parseInt(txtAno.getText());
-        int gols = txtGols.getText().isEmpty() ? 0 : Integer.parseInt(txtGols.getText());
-        int assistencias = txtAssistencias.getText().isEmpty() ? 0 : Integer.parseInt(txtAssistencias.getText());
-        int titulos = txtTitulos.getText().isEmpty() ? 0 : Integer.parseInt(txtTitulos.getText());
-
-        return new BolaDeOuroDTO(
-                id,
-                txtJogador.getText(),
-                txtPais.getText(),
-                txtClube.getText(),
-                ano,
-                gols,
-                assistencias,
-                titulos
-        );
+    private void limparTela() {
+        formHandler.limparCampos();
+        tableHandler.limparSelecao();
     }
 }
