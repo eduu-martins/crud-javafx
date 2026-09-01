@@ -1,4 +1,4 @@
-package com.template.controller;
+package com.template.util;
 
 import com.template.model.dto.BolaDeOuroDTO;
 import javafx.collections.ObservableList;
@@ -22,8 +22,8 @@ public class JogadorTableHandler {
             TableColumn<BolaDeOuroDTO, Integer> colGols,
             TableColumn<BolaDeOuroDTO, Integer> colAssistencias,
             TableColumn<BolaDeOuroDTO, Integer> colTitulos,
-            Consumer<BolaDeOuroDTO> aoSelecionar
-    ) {
+            Consumer<BolaDeOuroDTO> aoSelecionar )
+    {
         this.tabela = tabela;
 
         colId.setCellValueFactory(new PropertyValueFactory<>("id"));

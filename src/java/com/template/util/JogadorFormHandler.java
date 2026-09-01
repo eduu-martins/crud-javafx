@@ -1,7 +1,6 @@
-package com.template.controller;
+package com.template.util;
 
 import com.template.model.dto.BolaDeOuroDTO;
-import com.template.util.FormUtil;
 import javafx.scene.control.TextField;
 
 public class JogadorFormHandler {
@@ -65,16 +64,7 @@ public class JogadorFormHandler {
         int assistencias = txtAssistencias.getText().isEmpty() ? 0 : Integer.parseInt(txtAssistencias.getText());
         int titulos = txtTitulos.getText().isEmpty() ? 0 : Integer.parseInt(txtTitulos.getText());
 
-        return new BolaDeOuroDTO(
-                id,
-                txtJogador.getText(),
-                txtPais.getText(),
-                txtClube.getText(),
-                ano,
-                gols,
-                assistencias,
-                titulos
-        );
+        return new BolaDeOuroDTO(id, txtJogador.getText(), txtPais.getText(), txtClube.getText(), ano, gols, assistencias, titulos);
     }
 
     public boolean temIdSelecionado() {

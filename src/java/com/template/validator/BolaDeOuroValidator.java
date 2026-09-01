@@ -6,7 +6,7 @@ import com.template.util.DialogUtil;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BolaDeOuroValidator {
+public class BolaDeOuroValidator implements IBolaDeOuroValidator {
     public static boolean validar(BolaDeOuroDTO jogador) {
         List<Validador<String>> validadores = new ArrayList<>();
 
@@ -23,11 +23,17 @@ public class BolaDeOuroValidator {
 
         // Executa o loop
         for (Validador<String> validador : validadores) {
-            if (!validador.validar(validador.getValor())) {
+            if (!validador.validarBolaDeOuro(validador.getValor())) {
                 DialogUtil.exibirErro(validador.getMensagemErro());
                 return false;
             }
         }
         return true;
+    }
+
+    //Erro
+    @Override
+    public boolean validar(String jogador, String pais, String clube, String ano, String gols, String assistencias, String titulos) {
+        return false;
     }
 }

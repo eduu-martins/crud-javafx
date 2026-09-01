@@ -4,6 +4,9 @@ import com.template.model.dto.BolaDeOuroDTO;
 import com.template.service.BolaDeOuroService;
 import com.template.util.DialogUtil;
 
+import com.template.util.JogadorFormHandler;
+import com.template.util.JogadorTableHandler;
+import com.template.validator.IBolaDeOuroValidator;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -43,6 +46,12 @@ public class MainController {
     private final BolaDeOuroService service = new BolaDeOuroService();
     private JogadorFormHandler formHandler;
     private JogadorTableHandler tableHandler;
+
+    /// ////// NOVO, NA TEORIA DESENCADEARIA ERROS!!!
+    private final IBolaDeOuroValidator iBolaDeOuroValidator;
+    public MainController(IBolaDeOuroValidator iBolaDeOuroValidator) {
+        this.iBolaDeOuroValidator = iBolaDeOuroValidator;
+    }
 
     @FXML
     private void initialize() {
